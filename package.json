@@ -16,10 +16,12 @@
   "author": "Miranda Little",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^5.22.0",
     "@sentry/node": "^7.64.0",
     "dotenv": "^16.3.1",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.1",
+    "prisma": "^5.22.0",
     "uuid": "^9.0.0",
     "winston": "^3.10.0"
   },

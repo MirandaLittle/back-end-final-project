@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 const getUsers =  async () => {
     const prisma = new PrismaClient({
         omit: {
-          User: {
+          user: {
             password: true,
           },
         },

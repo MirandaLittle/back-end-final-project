@@ -1,5 +1,5 @@
 import express from "express";
-// import amenitiesRouter from './routes/amenities.js' //.js extension needed
+import amenitiesRouter from './routes/amenities.js'
 // import bookingsRouter from './routes/bookings.js'
 import loginRouter from './routes/login.js'
 // import hostsRouter from './routes/hosts.js'
@@ -41,7 +41,7 @@ app.use(Sentry.Handlers.tracingHandler());
 app.use(express.json()); // middleware helper, we're going to be sending you information in a format called JSON. Please make sure you understand it and put it into the req.body object for us."
 
 // app.use(log)
-// app.use('/amenities', amenitiesRouter)
+app.use('/amenities', amenitiesRouter)
 // app.use('/bookings', bookingsRouter)
 // app.use('/hosts', hostsRouter)
 app.use('/login', loginRouter)
