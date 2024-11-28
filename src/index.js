@@ -1,13 +1,12 @@
 import express from "express";
 import amenitiesRouter from './routes/amenities.js'
-// import bookingsRouter from './routes/bookings.js'
+import bookingsRouter from './routes/bookings.js'
 import loginRouter from './routes/login.js'
-// import hostsRouter from './routes/hosts.js'
-//import propertiesRouter from './routes/properties.js'
-//import reviewsRouter from './routes/reviews.js'
+import hostsRouter from './routes/hosts.js'
+import propertiesRouter from './routes/properties.js'
+import reviewsRouter from './routes/reviews.js'
 import userRouter from './routes/users.js'
-
-//import log from './middleware/logMiddleware.js'
+import log from './middleware/logMiddleware.js'
 import 'dotenv/config';
 import * as Sentry from '@sentry/node';
 import errorHandler from './middleware/errorHandler.js';
@@ -39,15 +38,17 @@ app.use(Sentry.Handlers.requestHandler());
 app.use(Sentry.Handlers.tracingHandler());
 
 app.use(express.json()); // middleware helper, we're going to be sending you information in a format called JSON. Please make sure you understand it and put it into the req.body object for us."
+app.use(log);
 
 // app.use(log)
-app.use('/amenities', amenitiesRouter)
-// app.use('/bookings', bookingsRouter)
-// app.use('/hosts', hostsRouter)
-app.use('/login', loginRouter)
-// app.use('/properties', propertiesRouter)
-// app.use('/reviews', reviewsRouter)
-app.use('/users', userRouter)
+app.use('/amenities', amenitiesRouter);
+app.use('/bookings', bookingsRouter);
+app.use('/hosts', hostsRouter);
+app.use('/login', loginRouter);
+app.use('/properties', propertiesRouter);
+app.use('/reviews', reviewsRouter);
+app.use('/users', userRouter);
+
 
 app.get("/", (req, res) => {
   res.send("Hello world!");

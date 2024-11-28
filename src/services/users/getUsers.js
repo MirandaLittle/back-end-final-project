@@ -1,6 +1,6 @@
 import { PrismaClient } from '@prisma/client'
 
-const getUsers =  async () => {
+const getUsers =  async (username, email) => {
     const prisma = new PrismaClient({
         omit: {
           user: {
@@ -8,7 +8,12 @@ const getUsers =  async () => {
           },
         },
       });
-  const usersWithoutPasswords = await prisma.user.findMany({});
+  const usersWithoutPasswords = await prisma.user.findMany({
+    where: {
+      username,
+      email
+  }
+  });
   return usersWithoutPasswords;
     
 };

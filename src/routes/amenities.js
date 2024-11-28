@@ -52,12 +52,9 @@ router.put("/:id", auth, async (req, res, next) => {
     console.log("reg body:", req.body);
   const { id } = req.params;
   const { name } = req.body;
-  const amenity = await updateAmenityById(id, {
-    name
-  });
+  const amenity = await updateAmenityById(id, name);
   console.log("amenity:", amenity);
     res.status(200).send({
-      message: `Amenity with id ${id} successfully updated`,
       amenity,
     });
   } catch (error) {
