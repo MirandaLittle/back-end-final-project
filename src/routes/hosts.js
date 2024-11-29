@@ -6,6 +6,7 @@ import deleteHostById from "../services/hosts/deleteHostById.js";
 import updateHostById from "../services/hosts/updateHostById.js";
 import auth from "../middleware/auth.js";
 import notFoundErrorHandler from '../middleware/notFoundErrorHandler.js';
+import badRequestErrorHandler from "../middleware/badRequestErrorHandler.js";
 
 const router = Router();
 
@@ -15,11 +16,15 @@ router.get("/", async (req, res) => {
   res.json(hosts);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, async (req, res, next) => {
+  try {
   const { username, password, name, email, phoneNumber, profilePicture, aboutMe } = req.body;
   const newHost = await createHost(username, password, name, email, phoneNumber, profilePicture, aboutMe);
   res.status(201).json(newHost);
-});
+} catch (error) {
+  next(error) 
+}
+}, badRequestErrorHandler);
 
  
 router.get("/:id", async (req, res, next) => {

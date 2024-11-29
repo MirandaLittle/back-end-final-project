@@ -6,6 +6,7 @@ import deleteBookingById from "../services/bookings/deleteBookingById.js";
 import updateBookingById from "../services/bookings/updateBookingById.js";
 import auth from "../middleware/auth.js";
 import notFoundErrorHandler from '../middleware/notFoundErrorHandler.js';
+import badRequestErrorHandler from "../middleware/badRequestErrorHandler.js";
 
 const router = Router();
 
@@ -15,11 +16,15 @@ router.get("/", async (req, res) => {
   res.json(bookings);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, async (req, res, next) => {
+  try {
   const { userId, propertyId, checkinDate, checkoutDate, numberOfGuests, totalPrice, bookingStatus } = req.body;
   const newBooking = await createBooking(userId, propertyId, checkinDate, checkoutDate, numberOfGuests, totalPrice, bookingStatus);
   res.status(201).json(newBooking);
-});
+} catch (error) {
+  next(error) 
+}
+}, badRequestErrorHandler);
  
 router.get("/:id", async (req, res, next) => {
   try {

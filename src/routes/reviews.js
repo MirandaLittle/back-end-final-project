@@ -6,6 +6,7 @@ import deleteReviewById from "../services/reviews/deleteReviewById.js";
 import updateReviewById from "../services/reviews/updateReviewById.js";
 import auth from "../middleware/auth.js";
 import notFoundErrorHandler from '../middleware/notFoundErrorHandler.js';
+import badRequestErrorHandler from "../middleware/badRequestErrorHandler.js";
 
 const router = Router();
 
@@ -14,11 +15,15 @@ router.get("/", async (req, res) => {
   res.json(reviews);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, async (req, res, next) => {
+  try {
   const { userId, propertyId, rating, comment } = req.body;
   const newReview = await createReview(userId, propertyId, rating, comment);
   res.status(201).json(newReview);
-});
+} catch (error) {
+  next(error) 
+}
+}, badRequestErrorHandler);
 
  
 router.get("/:id", async (req, res, next) => {

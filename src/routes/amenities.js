@@ -5,7 +5,8 @@ import getAmenityById from "../services/amenities/getAmenityById.js";
 import deleteAmenityById from "../services/amenities/deleteAmenityById.js";
 import updateAmenityById from "../services/amenities/updateAmenityById.js";
 import auth from "../middleware/auth.js";
-import notFoundErrorHandler from '../middleware/NotFoundErrorHandler.js';
+import notFoundErrorHandler from '../middleware/notFoundErrorHandler.js';
+import badRequestErrorHandler from "../middleware/badRequestErrorHandler.js";
 
 const router = Router();
 
@@ -14,19 +15,20 @@ router.get("/", async (req, res) => {
   res.json(amenities);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, async (req, res, next) => {
+  try {
   const { name } = req.body;
-  const newAmenity = await createAmenity(
-    name
-  );
+  const newAmenity = await createAmenity(name);
   res.status(201).json(newAmenity);
-});
+} catch (error) {
+  next(error) 
+}
+}, badRequestErrorHandler);
 
 router.get("/:id", async (req, res, next) => {
   try {
   const { id } = req.params;
   const amenity = await getAmenityById(id);
-
   res.status(200).json(amenity);
   } catch (error) {
     next(error) 
@@ -49,7 +51,6 @@ router.delete("/:id", auth, async (req, res, next) => {
 
 router.put("/:id", auth, async (req, res, next) => {
   try {
-    console.log("reg body:", req.body);
   const { id } = req.params;
   const { name } = req.body;
   const amenity = await updateAmenityById(id, name);

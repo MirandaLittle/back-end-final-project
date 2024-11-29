@@ -6,6 +6,7 @@ import deleteUserById from "../services/users/deleteUserById.js";
 import updateUserById from "../services/users/updateUserById.js";
 import auth from "../middleware/auth.js";
 import notFoundErrorHandler from '../middleware/notFoundErrorHandler.js';
+import badRequestErrorHandler from "../middleware/badRequestErrorHandler.js";
 
 const router = Router();
 
@@ -15,11 +16,15 @@ router.get("/", async (req, res) => {
   res.json(users);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, async (req, res, next) => {
+  try {
   const { username, password, name, email, phoneNumber, profilePicture } = req.body;
   const newUser = await createUser(username, password, name, email, phoneNumber, profilePicture);
   res.status(201).json(newUser);
-});
+} catch (error) {
+  next(error) 
+}
+}, badRequestErrorHandler);
 
 
 router.get("/:id", async (req, res, next) => {

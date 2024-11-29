@@ -6,20 +6,25 @@ import deletePropertyById from "../services/properties/deletePropertyById.js";
 import updatePropertyById from "../services/properties/updatePropertyById.js";
 import auth from "../middleware/auth.js";
 import notFoundErrorHandler from '../middleware/NotFoundErrorHandler.js';
+import badRequestErrorHandler from "../middleware/badRequestErrorHandler.js";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
-  const { location, pricePerNight } = req.query
-  const properties = await getProperties(location, pricePerNight);
+  const { location, pricePerNight, amenities} = req.query
+  const properties = await getProperties(location, pricePerNight, amenities);
   res.json(properties);
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", auth, async (req, res, next) => {
+  try {
   const { title, description, location, pricePerNight, bedroomCount, bathRoomCount, maxGuestCount, hostId, rating } = req.body;
   const newProperty = await createProperty( title, description, location, pricePerNight, bedroomCount, bathRoomCount, maxGuestCount, hostId, rating);
   res.status(201).json(newProperty);
-});
+} catch (error) {
+  next(error) 
+}
+}, badRequestErrorHandler);
 
 
 router.get("/:id", async (req, res, next) => {

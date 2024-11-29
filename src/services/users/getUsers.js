@@ -10,8 +10,8 @@ const getUsers =  async (username, email) => {
       });
   const usersWithoutPasswords = await prisma.user.findMany({
     where: {
-      username,
-      email
+      ...(username && { username: { contains: username } }),
+      ...(email && { email: { contains: email } }),
   }
   });
   return usersWithoutPasswords;
